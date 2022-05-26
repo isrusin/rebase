@@ -133,10 +133,11 @@ def write_entries(outsv, entries):
     column_set = set()
     for pairs in entries.values():
         column_set.update(pairs)
-    columns = COLUMNS
-    columns += sorted(f"{name}_raw" for name in (column_set - set(COLUMNS)))
+    columns_raw = sorted(column_set - set(COLUMNS))
     with outsv:
-        print("#:", "\t".join(columns), sep="", file=outsv)
+        title = COLUMNS + [f"{col}_raw" for col in columns_raw]
+        print("#:", "\t".join(title), sep="", file=outsv)
+        columns = COLUMNS + columns_raw
         for name, pairs in sorted(entries.items()):
             print(
                 name, *(pairs.get(col, "") for col in columns[1:]),
