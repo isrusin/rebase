@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-"""Assign R-M systems and name-based protein types.
+"""Parse protein names and use this info to fix their annotations.
 
 REBASE contains some unconventional systems and proteins, but such
 proteins are annotated as traditional R-M system components, except for
@@ -180,7 +180,7 @@ def assign_systems(entries, outsv):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Assign types and systems.")
+    parser = argparse.ArgumentParser(description="Parse REBASE names.")
     parser.add_argument(
         "intsv", metavar="TSV", type=argparse.FileType("r"),
         help="input TSV file with REBASE proteins"
