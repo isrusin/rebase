@@ -47,28 +47,34 @@ def select_repr(nms, putative_tag="P"):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Cluster identical sequences.")
+    parser = argparse.ArgumentParser(
+        description="Cluster identical sequences."
+    )
     parser.add_argument(
         "infasta", metavar="FASTA", help="""input .fasta file, may be gzipped,
         .gz extension is required in this case"""
     )
     parser.add_argument(
-        "-o", "--output-tag", dest="outag", metavar="TAG", help="""output name tag,
-        default is 'nr-' + input name without .fa* extension; the script will
-        create <TAG>.fasta.gz with representative sequences, and <TAG>.clusters.tsv
-        with clusters"""
+        "-o", "--output-tag", dest="outag", metavar="TAG",
+        help="""output name tag, default is 'nr-' + input name without .fa*
+        extension; the script will create <TAG>.fasta.gz with representative
+        sequences, and <TAG>.clusters.tsv with clusters"""
     )
     parser.add_argument(
         "-c", "--cluster-prefix", dest="prefix", metavar="TAG", default="nr-",
         help="cluster name prefix, default is 'nr-'"
     )
     parser.add_argument(
-        "-w", "--sequence-width", dest="width", metavar="N", type=int, default=80,
-        help="output sequence width, default is 80"
+        "-w", "--sequence-width", dest="width", metavar="N", type=int,
+        default=80, help="output sequence width, default is 80"
     )
     parser.add_argument(
-        "-n", "--column-name", dest="coln", metavar="NAME", default="Sequence_ID",
+        "-n", "--seq-title", dest="coln", metavar="STR", default="Sequence_ID",
         help="first column header, default is 'Sequence_ID'"
+    )
+    parser.add_argument(
+        "-r", "--repr-title", dest="colr", default="Representative",
+        metavar="STR", help="third column header, default is 'Representative'"
     )
     args = parser.parse_args(argv)
     if args.infasta == "-":
@@ -91,7 +97,7 @@ def main(argv=None):
         write_seqs(oufasta, reprs, width=args.width)
     with open(f"{outag}.clusters.tsv", "w") as outsv:
         print(
-            f"#:{args.coln}\tSequence_length\tRepresentative\tCluster_ID",
+            f"#:{args.coln}\tSequence_length\t{args.colr}\tCluster_ID",
             file=outsv
         )
         for num, cluster in enumerate(sorted(clusters)):
