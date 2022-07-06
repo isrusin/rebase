@@ -34,18 +34,18 @@ It is a set of files generated and update through `redo` recipes (\*.do files).
 
 ## Requirements
 
- * [redo](https://redo.readthedocs.io)
- * [lab-tools](https://github.com/isrusin/lab-tools) (for names/)
-  - `sieve_tsv.py` (for names/)
-  - `transform_tsv.py` (for names/)
- * python 3
-  - [etsv](https://github.com/isrusin/etsv) (for names/)
- * coreutils
-  - `cut`
-  - `paste`
-  - `sort`
-  - `touch`
- * other
-  - `curl`
-  - `gzip`, `zcat`
-  - `sed`
+ *  [redo](https://redo.readthedocs.io)
+ *  [lab-tools](https://github.com/isrusin/lab-tools) (for names/)
+     -  `sieve_tsv.py` (for names/)
+     -  `transform_tsv.py` (for names/)
+ *  python 3
+     -  [etsv](https://github.com/isrusin/etsv) (for names/)
+ *  coreutils
+     -  `cut`
+     -  `paste`
+     -  `sort`
+     -  `touch`
+ *  other
+     -  `curl`
+     -  `gzip`, `zcat`
+     -  `sed`
