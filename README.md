@@ -16,11 +16,19 @@ It is a set of files generated and updated through redo recipes (\*.do files).
  *  `genes.tsv` – tabular data derived from `dna_seqs.txt`.
  *  `gold.fasta.gz` – protein sequences from `protein_gold_seqs.txt`.
  *  `gold.tsv` – tabular data derived from `protein_gold_seqs.txt`.
+ *  `proteins.rnm.ids` – a list of all REBASE protein names.
+ *  `proteins_np.rnm.ids` – a list of REBASE names of non-putative proteins.
+ *  `proteins_gs.rnm.ids` – a list of all protein names from the Gold Standard.
  *  `rid-rnm.dct` – `REBASE_ID` to `REBASE_name` dict.
  *  `rebnr.clusters.tsv` – clusters of REBASE proteins with identical.
     sequences; non-putatives are preferred as representatives.
  *  `rebnr.fasta.gz` – REBNR representative sequences, contains all
     unique REBASE sequences.
+ *  `rebnr.nrnm.ids` – a list of all REBNR names.
+ *  `rebnr_np.nrnm.ids` – a list of REBNR representative names for clusters
+     with non-putative proteins.
+ *  `rebnr_gs.nrnm.ids` – a list of REBNR representative names for clusters
+     that contain proteins from the Gold Standard.
  *  `names/` – contains data derived from interpretation of REBASE names.
      *  `name_data.tsv` – the main file that contains all data used for
         interpretation of REBASE component names and derived corrected
