@@ -43,7 +43,8 @@ def write_seqs(oufasta, seqs, width=80):
 
 def select_repr(nms, putative_tag="P"):
     reprs = [nm for nm in nms if not nm.endswith(putative_tag)] or nms
-    return sorted(reprs, key=len)[0]
+    def shortest_first(nm): return (len(nm), nm)
+    return sorted(reprs, key=shortest_first)[0]
 
 
 def main(argv=None):
