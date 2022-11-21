@@ -3,7 +3,7 @@
 """Cluster identical sequences.
 
 CD-HIT is surprisingly inefficient for this particular task. Besides, it
-does not allow to prefer non-putative proteins to be cluster representatives.
+does not allow to select cluster representatives.
 """
 
 import argparse
@@ -11,6 +11,15 @@ import gzip
 import sys
 from os.path import basename
 from textwrap import wrap
+
+
+def load_nms(inlist):
+    nms = set()
+    for line in inlist:
+        if line.startswith("#"):
+            continue
+        nms.add(line.strip())
+    return nms
 
 
 def add_seq(nm, seq, seqs):
@@ -41,10 +50,15 @@ def write_seqs(oufasta, seqs, width=80):
         print(*wrap(seq, width), sep="\n", file=oufasta)
 
 
-def select_repr(nms, putative_tag="P"):
-    reprs = [nm for nm in nms if not nm.endswith(putative_tag)] or nms
-    def shortest_first(nm): return (len(nm), nm)
-    return sorted(reprs, key=shortest_first)[0]
+def select_repr(nms, preferred=set(), putative_tag="P"):
+    reprs = set(nms).intersection(preferred)
+    if not reprs:
+        reprs = [nm for nm in nms if not nm.endswith(putative_tag)] or nms
+    return select_shortest(reprs)
+
+
+def select_shortest(nms):
+    return sorted(nms, key=lambda nm: (len(nm), nm))[0]
 
 
 def main(argv=None):
@@ -77,7 +91,16 @@ def main(argv=None):
         "-r", "--repr-title", dest="colr", default="Representative",
         metavar="STR", help="third column header, default is 'Representative'"
     )
+    parser.add_argument(
+        "--gold", dest="gold", metavar="FILE", type=argparse.FileType("r"),
+        help="""list of protein which should be preferred as representative
+        members"""
+    )
     args = parser.parse_args(argv)
+    preferred = set()
+    if args.gold:
+        with args.gold as inlist:
+            preferred = load_nms(inlist)
     if args.infasta == "-":
         infasta = sys.stdin
     elif args.infasta.endswith(".gz"):
@@ -91,7 +114,7 @@ def main(argv=None):
     reprs = dict()
     clusters = []
     for seq, nms in seqs.items():
-        repr_nm = select_repr(nms)
+        repr_nm = select_repr(nms, preferred)
         clusters.append((-len(nms), repr_nm, len(seq), nms))
         reprs[repr_nm] = seq
     with gzip.open(f"{outag}.fasta.gz", "wt") as oufasta:
