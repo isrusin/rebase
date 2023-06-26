@@ -12,6 +12,8 @@ import sys
 from os.path import basename
 from textwrap import wrap
 
+from crc64iso.crc64iso import crc64
+
 
 def load_nms(inlist):
     nms = set()
@@ -115,20 +117,24 @@ def main(argv=None):
     clusters = []
     for seq, nms in seqs.items():
         repr_nm = select_repr(nms, preferred)
-        clusters.append((-len(nms), repr_nm, len(seq), nms))
+        checksum = crc64(seq.upper())
+        clusters.append((-len(nms), repr_nm, len(seq), nms, checksum))
         reprs[repr_nm] = seq
     with gzip.open(f"{outag}.fasta.gz", "wt") as oufasta:
         write_seqs(oufasta, reprs, width=args.width)
     with open(f"{outag}.clusters.tsv", "w") as outsv:
         print(
-            f"#:{args.coln}\tSequence_length\t{args.colr}\tCluster_ID",
+            f"#:{args.coln}\tSequence_length\t{args.colr}\tCluster_ID\tCRC64",
             file=outsv
         )
         for num, cluster in enumerate(sorted(clusters)):
             cluster_nm = f"{args.prefix}{num}"
-            _invlen, repr_nm, seq_len, nms = cluster
+            _invlen, repr_nm, seq_len, nms, checksum = cluster
             for nm in sorted(nms):
-                print(nm, seq_len, repr_nm, cluster_nm, sep="\t", file=outsv)
+                print(
+                    nm, seq_len, repr_nm, cluster_nm, checksum,
+                    sep="\t", file=outsv
+                )
 
 
 if __name__ == "__main__":

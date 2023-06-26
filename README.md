@@ -47,6 +47,7 @@ It is a set of files generated and updated through redo recipes (\*.do files).
      -  `sieve_tsv.py` (for names/)
      -  `transform_tsv.py` (for names/)
  *  python 3
+     -  [crc64iso](https://pypi.org/project/crc64iso)
      -  [etsv](https://github.com/isrusin/etsv) (for names/)
  *  coreutils
      -  `cut`
