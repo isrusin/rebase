@@ -59,6 +59,7 @@ ACTIVITIES = {
     "helicase domain protein": "H",
     "orphan methyltransferase": "M_orphan",
     "homing endonuclease": "R_homing",
+    "methyltransferasespecificity subunit": "M",
 }
 
 COLUMNS = [
@@ -79,6 +80,8 @@ def parse_EnzType(type_str):
     is_md = type_match.group("md")
     activity = type_match.group("activity").strip()
     assert activity in ACTIVITIES, f"Unknown enzyme type \"{activity}\"!"
+    if "methyltransferasespecificity" in activity:
+        logging.warning(f"strange activity '{activity}', treat as MTase")
 
     enz_tp = ACTIVITIES[activity]
     if enz_tp == "M_orphan":
