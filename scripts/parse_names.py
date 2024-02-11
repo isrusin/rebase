@@ -84,8 +84,16 @@ def add_name_type(entry):
     if type_m:
         name_type = type_m.group("type")
         if name_type == "Dcm":
-            name_type = f"{entry['prot_type']}.Dcm"
-        entry["name_type"] = name_type
+            prot_type = entry["prot_type"]
+            if prot_type in "MV":
+                entry["name_type"] = f"{prot_type}.Dcm"
+            else:
+                logging.info(
+                    f"ignore Dcm tag of {entry['name']}"
+                    f" because of {prot_type} protein type"
+                )
+        else:
+            entry["name_type"] = name_type
 
 
 def fix_ssps(entries):
