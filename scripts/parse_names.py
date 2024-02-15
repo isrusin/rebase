@@ -135,7 +135,12 @@ def add_system(entry):
         _tag, name = name.split(".", 1)
     name_type = entry.get("name_type")
     if name_type in SYSTEM_TAGS:
-        name = SYSTEM_TAGS[name_type].join(name.rsplit(name_type, 1))
+        sep = name_type
+        if "McrBC" in name:
+            sep = "McrBC"
+        elif "GmrSD" in name:
+            sep = "GmrSD"
+        name = SYSTEM_TAGS[name_type].join(name.rsplit(sep, 1))
     entry["system"] = name
 
 
